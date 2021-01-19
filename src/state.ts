@@ -53,4 +53,24 @@ export const todosList$ = todosMap$.pipe(
   shareLatest()
 );
 
-export const [useTodos, todos$] = bind(todosList$);
+export const [useTodos, todos$] = bind(todosList$); 
+
+export const [useStats, stats$] = bind(
+  todosList$.pipe(
+    map((todosList) => {
+      const nTotal = todosList.length;
+      const nCompleted = todosList.filter((item) => item.done).length;
+      const nUncompleted = nTotal - nCompleted;
+      const percentCompleted =
+        nTotal === 0 ? 0 : Math.round((nCompleted / nTotal) * 100);
+
+      return {
+        nTotal,
+        nCompleted,
+        nUncompleted,
+        percentCompleted
+      };
+    })
+  ),
+  { nTotal: 0, nCompleted: 0, nUncompleted: 0, percentCompleted: 0 }
+);

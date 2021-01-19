@@ -1,11 +1,13 @@
 import * as React from "react";
+import { merge } from "rxjs";
 import { Subscribe } from "@react-rxjs/core";
-import { todos$ } from "./state";
+import { stats$, todos$ } from "./state";
 import { TodoList } from "./components";
 
+const provider$ = merge(todos$, stats$);
 export default function App() {
   return (
-    <Subscribe source$={todos$}>
+    <Subscribe source$={provider$}>
       <TodoList />
     </Subscribe>
   );
